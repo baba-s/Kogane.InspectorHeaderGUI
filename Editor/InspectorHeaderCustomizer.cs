@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace UniInspectorHeaderCustomizer
 	{
 		private const int REMOVE_DATA_PATH_COUNT = 6;
 
+		private static readonly Type MONO_SCRIPT_TYPE = typeof( MonoScript );
+
 		static InspectorHeaderCustomizer()
 		{
 			Editor.finishedDefaultHeaderGUI += HeaderGUI;
@@ -17,6 +20,10 @@ namespace UniInspectorHeaderCustomizer
 
 		private static void HeaderGUI( Editor editor )
 		{
+			var type = editor.target.GetType();
+
+			if ( type == MONO_SCRIPT_TYPE ) return;
+
 			using ( new EditorGUILayout.HorizontalScope() )
 			{
 				var path       = AssetDatabase.GetAssetPath( editor.target );
