@@ -2,7 +2,7 @@
 
 * Inspector のヘッダにボタンを追加するエディタ拡張
 
-## 使用例
+## 使い方
 
 ![2020-04-21_134859](https://user-images.githubusercontent.com/6134875/79826545-04cd6b80-83d7-11ea-8dd0-46e639764d78.png)
 
