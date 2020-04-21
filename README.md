@@ -1,6 +1,6 @@
 # Uni Inspector Header Customizer
 
-* Inspector のヘッダにボタンを追加するエディタ拡張
+Inspector のヘッダにボタンを追加するエディタ拡張
 
 ## 使い方
 
