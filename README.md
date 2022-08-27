@@ -1,4 +1,4 @@
-# Uni Inspector Header Customizer
+# Kogane Inspector Header GUI
 
 Inspector のヘッダにボタンを追加するエディタ拡張
 

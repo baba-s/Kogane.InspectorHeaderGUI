@@ -1,5 +1,6 @@
 {
-    "name": "UniInspectorHeaderCustomizer",
+    "name": "Kogane.InspectorHeaderGUI",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [
         "Editor"
