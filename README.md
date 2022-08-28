@@ -8,7 +8,7 @@ Inspector のヘッダにボタンを追加するエディタ拡張
 
 |項目|内容|
 |:--|:--|
-|Unlock/ Lock|Inspector のロック状態を切り替え|
+|Unlock / Lock|Inspector のロック状態を切り替え|
 |Normal / Debug|Inspector のデバッグモードを切り替え|
 |Properties...|選択中のオブジェクトのプロパティウィンドウを表示|
 |Paste Component As New|選択中のゲームオブジェクトにコンポーネントを貼り付け|
