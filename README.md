@@ -13,3 +13,9 @@ Inspector のヘッダにボタンを追加するエディタ拡張
 |Properties...|選択中のオブジェクトのプロパティウィンドウを表示|
 |Paste Component As New|選択中のゲームオブジェクトにコンポーネントを貼り付け|
 |Show In Explorer|選択中のアセットをエクスプローラで表示|
+
+## 依存するパッケージ
+
+```
+https://github.com/baba-s/Kogane.PropertyEditorInternal.git
+```
