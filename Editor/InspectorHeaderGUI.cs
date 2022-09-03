@@ -207,14 +207,6 @@ namespace Kogane.Internal
 
             try
             {
-                const string text =
-#if UNITY_EDITOR_WIN
-                        "Show In Explorer"
-#else
-                        "Reveal In Finder"
-#endif
-                    ;
-
                 if ( GUILayout.Button( REVEAL_IN_FINDER_TEXTURE.GuiContent, EditorStyles.miniButtonRight ) )
                 {
                     foreach ( var target in editor.targets )
