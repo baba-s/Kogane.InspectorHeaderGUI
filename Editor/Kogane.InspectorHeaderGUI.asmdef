@@ -1,7 +1,9 @@
 {
     "name": "Kogane.InspectorHeaderGUI",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:7cf496185eed6c846b884f2281c03512"
+    ],
     "includePlatforms": [
         "Editor"
     ],

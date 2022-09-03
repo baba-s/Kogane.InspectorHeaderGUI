@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditorInternal;
@@ -9,6 +10,8 @@ namespace Kogane.Internal
     [InitializeOnLoad]
     internal static class InspectorHeaderGUI
     {
+        private static readonly Type PROPERTY_EDITOR_TYPE = typeof( Editor ).Assembly.GetType( "UnityEditor.PropertyEditor" );
+
         static InspectorHeaderGUI()
         {
             Editor.finishedDefaultHeaderGUI -= OnGUI;
@@ -24,6 +27,22 @@ namespace Kogane.Internal
                 DrawPropertiesButton();
                 DrawPasteComponentAsNew( editor );
                 DrawRevealInFinderButton( editor );
+            }
+
+            var oldEnabled = GUI.enabled;
+            GUI.enabled = editor.targets.All( x => !EditorUtility.IsPersistent( x ) );
+
+            try
+            {
+                using ( new EditorGUILayout.HorizontalScope() )
+                {
+                    DrawExpandAllComponentsButton();
+                    DrawCollapseAllComponentsButton();
+                }
+            }
+            finally
+            {
+                GUI.enabled = oldEnabled;
             }
         }
 
@@ -158,6 +177,31 @@ namespace Kogane.Internal
             {
                 GUI.enabled = oldEnabled;
             }
+        }
+
+
+        private static void DrawExpandAllComponentsButton()
+        {
+            if ( GUILayout.Button( "Expand All Components", EditorStyles.miniButtonLeft ) )
+            {
+                PropertyEditorInternal.ExpandAllComponents( GetPropertyEditor() );
+            }
+        }
+
+        private static void DrawCollapseAllComponentsButton()
+        {
+            if ( GUILayout.Button( "Collapse All Components", EditorStyles.miniButtonRight ) )
+            {
+                PropertyEditorInternal.CollapseAllComponents( GetPropertyEditor() );
+            }
+        }
+
+        private static EditorWindow GetPropertyEditor()
+        {
+            return Resources
+                    .FindObjectsOfTypeAll( PROPERTY_EDITOR_TYPE )
+                    .FirstOrDefault() as EditorWindow
+                ;
         }
     }
 }
