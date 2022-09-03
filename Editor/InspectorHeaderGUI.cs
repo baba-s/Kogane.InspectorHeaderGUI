@@ -60,7 +60,11 @@ namespace Kogane.Internal
         private static void OnGUI( Editor editor )
         {
             var oldContentColor = GUI.contentColor;
-            GUI.contentColor = new Color32( 188, 188, 188, 255 );
+
+            GUI.contentColor = EditorGUIUtility.isProSkin
+                    ? new Color32( 188, 188, 188, 255 )
+                    : new Color32( 20, 20, 20, 255 )
+                ;
 
             try
             {
