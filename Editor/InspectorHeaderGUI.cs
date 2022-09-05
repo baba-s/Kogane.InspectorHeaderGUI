@@ -1,9 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Kogane.Internal
 {
@@ -50,6 +54,7 @@ namespace Kogane.Internal
         private static readonly TextureData REVEAL_IN_FINDER_TEXTURE        = new( "3a4a8645203241445804d6b3e0614b39" );
         private static readonly TextureData EXPAND_ALL_COMPONENTS_TEXTURE   = new( "ff490dff6b933244c862ec4ffb5f0966" );
         private static readonly TextureData COLLAPSE_ALL_COMPONENTS_TEXTURE = new( "9c38d887be2f708418388db6a513aa78" );
+        private static readonly TextureData VS_CODE_TEXTURE                 = new( "642d88ffa9946e143b3fc51b286b6ad7" );
 
         static InspectorHeaderGUI()
         {
@@ -88,6 +93,7 @@ namespace Kogane.Internal
                     }
 
                     DrawPasteComponentAsNew( editor );
+                    DrawOpenVisualStudioCodeButton( editor );
                     DrawRevealInFinderButton( editor );
                 }
             }
@@ -236,6 +242,42 @@ namespace Kogane.Internal
             if ( GUILayout.Button( COLLAPSE_ALL_COMPONENTS_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
             {
                 PropertyEditorInternal.CollapseAllComponents( GetPropertyEditor() );
+            }
+        }
+
+        private static void DrawOpenVisualStudioCodeButton( Editor editor )
+        {
+            var oldEnabled = GUI.enabled;
+            GUI.enabled = editor.targets.All( x => EditorUtility.IsPersistent( x ) );
+
+            try
+            {
+                if ( GUILayout.Button( VS_CODE_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
+                {
+                    foreach ( var target in editor.targets )
+                    {
+                        var assetPath = AssetDatabase.GetAssetPath( target );
+                        var fullPath  = Path.GetFullPath( assetPath );
+
+                        var startInfo = new ProcessStartInfo( "code", $@"-r ""{fullPath}""" )
+                        {
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                        };
+
+                        try
+                        {
+                            Process.Start( startInfo );
+                        }
+                        catch ( Win32Exception )
+                        {
+                            Debug.LogError( "Mac でこのコマンドを使用する場合は Visual Studio Code のコマンドパレットで `Shell Command: Install code command in PATH` を実行しておく必要があります" );
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                GUI.enabled = oldEnabled;
             }
         }
 
