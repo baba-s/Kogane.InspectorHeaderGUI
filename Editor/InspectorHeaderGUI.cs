@@ -104,6 +104,8 @@ namespace Kogane.Internal
             {
                 GUI.contentColor = oldContentColor;
             }
+
+            DrawGuidLabel( editor );
         }
 
         private static void DrawLockButton()
@@ -304,6 +306,26 @@ namespace Kogane.Internal
             finally
             {
                 GUI.enabled = oldEnabled;
+            }
+        }
+
+        private static void DrawGuidLabel( Editor editor )
+        {
+            if ( editor.targets.Any( x => !EditorUtility.IsPersistent( x ) ) ) return;
+
+            var assetPath   = AssetDatabase.GetAssetPath( editor.target );
+            var guid        = AssetDatabase.AssetPathToGUID( assetPath );
+            var totalRect   = EditorGUILayout.GetControlRect();
+            var controlRect = EditorGUI.PrefixLabel( totalRect, EditorGUIUtility.TrTempContent( "GUID" ) );
+
+            if ( 1 < editor.targets.Length )
+            {
+                var label = EditorGUIUtility.TrTempContent( "[Multiple objects selected]" );
+                EditorGUI.LabelField( controlRect, label );
+            }
+            else
+            {
+                EditorGUI.SelectableLabel( controlRect, guid );
             }
         }
 
