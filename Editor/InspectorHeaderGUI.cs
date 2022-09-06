@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Unity.CodeEditor;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -55,6 +56,7 @@ namespace Kogane.Internal
         private static readonly TextureData EXPAND_ALL_COMPONENTS_TEXTURE   = new( "ff490dff6b933244c862ec4ffb5f0966" );
         private static readonly TextureData COLLAPSE_ALL_COMPONENTS_TEXTURE = new( "9c38d887be2f708418388db6a513aa78" );
         private static readonly TextureData VS_CODE_TEXTURE                 = new( "642d88ffa9946e143b3fc51b286b6ad7" );
+        private static readonly TextureData META_TEXTURE                    = new( "2f897b3428dafca4dbc7b2d661fb2099" );
 
         static InspectorHeaderGUI()
         {
@@ -93,6 +95,7 @@ namespace Kogane.Internal
                     }
 
                     DrawPasteComponentAsNew( editor );
+                    DrawOpenMetaButton( editor );
                     DrawOpenVisualStudioCodeButton( editor );
                     DrawRevealInFinderButton( editor );
                 }
@@ -228,7 +231,6 @@ namespace Kogane.Internal
             }
         }
 
-
         private static void DrawExpandAllComponentsButton()
         {
             if ( GUILayout.Button( EXPAND_ALL_COMPONENTS_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
@@ -272,6 +274,30 @@ namespace Kogane.Internal
                         {
                             Debug.LogError( "Mac でこのコマンドを使用する場合は Visual Studio Code のコマンドパレットで `Shell Command: Install code command in PATH` を実行しておく必要があります" );
                         }
+                    }
+                }
+            }
+            finally
+            {
+                GUI.enabled = oldEnabled;
+            }
+        }
+
+        private static void DrawOpenMetaButton( Editor editor )
+        {
+            var oldEnabled = GUI.enabled;
+            GUI.enabled = editor.targets.All( x => EditorUtility.IsPersistent( x ) );
+
+            try
+            {
+                if ( GUILayout.Button( META_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
+                {
+                    foreach ( var target in editor.targets )
+                    {
+                        var assetPath = AssetDatabase.GetAssetPath( target );
+                        var metaPath  = $"{assetPath}.meta";
+
+                        CodeEditor.CurrentEditor.OpenProject( metaPath );
                     }
                 }
             }
