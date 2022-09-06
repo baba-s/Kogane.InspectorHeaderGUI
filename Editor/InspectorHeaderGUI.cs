@@ -190,17 +190,17 @@ namespace Kogane.Internal
 
         private static void DrawPasteComponentAsNew( Editor editor )
         {
-            var gameObject   = editor.target as GameObject;
-            var isGameObject = gameObject != null;
-            var oldEnabled   = GUI.enabled;
-
-            GUI.enabled = isGameObject;
+            var oldEnabled = GUI.enabled;
+            GUI.enabled = editor.targets.All( x => x is GameObject );
 
             try
             {
                 if ( GUILayout.Button( PASTE_COMPONENT_AS_NEW_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
                 {
-                    ComponentUtility.PasteComponentAsNew( gameObject );
+                    foreach ( var gameObject in editor.targets.OfType<GameObject>() )
+                    {
+                        ComponentUtility.PasteComponentAsNew( gameObject );
+                    }
                 }
             }
             finally
