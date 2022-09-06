@@ -294,6 +294,12 @@ namespace Kogane.Internal
             {
                 if ( GUILayout.Button( META_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
                 {
+                    if ( !EditorSettings.projectGenerationUserExtensions.Contains( "meta" ) )
+                    {
+                        Debug.LogWarning( "Project Settings の「Editor > Additional extensions to include」に `meta` を追加してください" );
+                        return;
+                    }
+
                     foreach ( var target in editor.targets )
                     {
                         var assetPath = AssetDatabase.GetAssetPath( target );
