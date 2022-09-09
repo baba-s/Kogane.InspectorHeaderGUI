@@ -57,6 +57,7 @@ namespace Kogane.Internal
         private static readonly TextureData COLLAPSE_ALL_COMPONENTS_TEXTURE = new( "9c38d887be2f708418388db6a513aa78" );
         private static readonly TextureData VS_CODE_TEXTURE                 = new( "642d88ffa9946e143b3fc51b286b6ad7" );
         private static readonly TextureData META_TEXTURE                    = new( "2f897b3428dafca4dbc7b2d661fb2099" );
+        private static readonly TextureData PHOTOSHOP_TEXTURE               = new( "9cbc2d462f057664ab32a2a81a7738a7" );
 
         static InspectorHeaderGUI()
         {
@@ -96,6 +97,7 @@ namespace Kogane.Internal
 
                     DrawPasteComponentAsNew( editor );
                     DrawOpenMetaButton( editor );
+                    DrawOpenPhotoshopButton( editor );
                     DrawOpenVisualStudioCodeButton( editor );
                     DrawRevealInFinderButton( editor );
                 }
@@ -306,6 +308,30 @@ namespace Kogane.Internal
                         var metaPath  = $"{assetPath}.meta";
 
                         CodeEditor.CurrentEditor.OpenProject( metaPath );
+                    }
+                }
+            }
+            finally
+            {
+                GUI.enabled = oldEnabled;
+            }
+        }
+
+        private static void DrawOpenPhotoshopButton( Editor editor )
+        {
+            var oldEnabled = GUI.enabled;
+            GUI.enabled = editor.targets.All( x => EditorUtility.IsPersistent( x ) && x is TextureImporter );
+
+            try
+            {
+                if ( GUILayout.Button( PHOTOSHOP_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
+                {
+                    foreach ( var target in editor.targets )
+                    {
+                        var assetPath = AssetDatabase.GetAssetPath( target );
+                        var fullPath  = Path.GetFullPath( assetPath );
+
+                        Process.Start( @"open", $@"-a ""/Applications/Adobe Photoshop 2022/Adobe Photoshop 2022.app/Contents/MacOS/Adobe Photoshop 2022"" ""{fullPath}""" );
                     }
                 }
             }
