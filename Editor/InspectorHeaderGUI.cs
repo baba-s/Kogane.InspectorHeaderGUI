@@ -58,6 +58,7 @@ namespace Kogane.Internal
         private static readonly TextureData VS_CODE_TEXTURE                 = new( "642d88ffa9946e143b3fc51b286b6ad7" );
         private static readonly TextureData META_TEXTURE                    = new( "2f897b3428dafca4dbc7b2d661fb2099" );
         private static readonly TextureData PHOTOSHOP_TEXTURE               = new( "9cbc2d462f057664ab32a2a81a7738a7" );
+        private static readonly TextureData RIDER_TEXTURE                   = new( "a466de63f2a2a0a46a1ccebfa4b25cf3" );
 
         static InspectorHeaderGUI()
         {
@@ -98,6 +99,7 @@ namespace Kogane.Internal
                     DrawPasteComponentAsNew( editor );
                     DrawOpenMetaButton( editor );
                     DrawOpenPhotoshopButton( editor );
+                    DrawOpenRiderButton( editor );
                     DrawOpenVisualStudioCodeButton( editor );
                     DrawRevealInFinderButton( editor );
                 }
@@ -332,6 +334,32 @@ namespace Kogane.Internal
                         var fullPath  = Path.GetFullPath( assetPath );
 
                         Process.Start( @"open", $@"-a ""/Applications/Adobe Photoshop 2022/Adobe Photoshop 2022.app/Contents/MacOS/Adobe Photoshop 2022"" ""{fullPath}""" );
+                    }
+                }
+            }
+            finally
+            {
+                GUI.enabled = oldEnabled;
+            }
+        }
+
+        private static void DrawOpenRiderButton( Editor editor )
+        {
+            var oldEnabled = GUI.enabled;
+            GUI.enabled = editor.targets.All( x => EditorUtility.IsPersistent( x ) );
+
+            try
+            {
+                if ( GUILayout.Button( RIDER_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
+                {
+                    foreach ( var target in editor.targets )
+                    {
+                        var assetPath = AssetDatabase.GetAssetPath( target );
+                        var fullPath  = Path.GetFullPath( assetPath );
+
+#if UNITY_EDITOR_WIN
+                        Process.Start( @"C:\Program Files\JetBrains\JetBrains Rider 2021.1.3\bin\rider64.exe", fullPath );
+#endif
                     }
                 }
             }
