@@ -30,7 +30,7 @@ namespace Kogane.Internal
                     var path    = AssetDatabase.GUIDToAssetPath( m_guid );
                     var texture = AssetDatabase.LoadAssetAtPath<Texture2D>( path );
 
-                    m_guiContentCache = new GUIContent( texture )
+                    m_guiContentCache = new( texture )
                     {
                         text = string.Empty,
                     };
@@ -71,7 +71,7 @@ namespace Kogane.Internal
             var oldContentColor = GUI.contentColor;
 
             GUI.contentColor = EditorGUIUtility.isProSkin
-                    ? new Color32( 188, 188, 188, 255 )
+                    ? new( 188, 188, 188, 255 )
                     : new Color32( 20, 20, 20, 255 )
                 ;
 
