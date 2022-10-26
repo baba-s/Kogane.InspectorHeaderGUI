@@ -59,6 +59,7 @@ namespace Kogane.Internal
         private static readonly TextureData META_TEXTURE                    = new( "2f897b3428dafca4dbc7b2d661fb2099" );
         private static readonly TextureData PHOTOSHOP_TEXTURE               = new( "9cbc2d462f057664ab32a2a81a7738a7" );
         private static readonly TextureData RIDER_TEXTURE                   = new( "a466de63f2a2a0a46a1ccebfa4b25cf3" );
+        private static readonly TextureData PING_TEXTURE                    = new( "5f2e5c5ccaf62bb4d8043be19cc9fc5c" );
 
         static InspectorHeaderGUI()
         {
@@ -81,6 +82,7 @@ namespace Kogane.Internal
                 {
                     DrawLockButton();
                     DrawDebugButton();
+                    DrawPingButton( editor.target );
                     DrawPropertiesButton();
 
                     var oldEnabled = GUI.enabled;
@@ -234,6 +236,14 @@ namespace Kogane.Internal
             finally
             {
                 GUI.enabled = oldEnabled;
+            }
+        }
+
+        private static void DrawPingButton( UnityEngine.Object target )
+        {
+            if ( GUILayout.Button( PING_TEXTURE.GuiContent, EditorStyles.miniButtonMid ) )
+            {
+                EditorGUIUtility.PingObject( target );
             }
         }
 
